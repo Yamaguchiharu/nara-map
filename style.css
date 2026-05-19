@@ -1,0 +1,98 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 320px;
+  min-width: 300px;
+  max-width: 400px;
+  padding: 12px;
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+#map {
+  flex: 1;
+  background: white;
+}
+
+
+.area-item {
+  margin-bottom: 10px;
+}
+
+.area-item div:first-child {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.area-item label {
+  margin-right: 8px;
+  font-size: 13px;
+}
+
+
+.group-block {
+  margin-bottom: 15px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.group-block h4 {
+  margin: 5px 0;
+}
+
+.sidebar h4 {
+  margin-top: 12px;
+  margin-bottom: 5px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #ccc;
+  font-size: 14px;
+}
+
+#resetBtn {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  background: #eee;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#resetBtn:hover {
+  background: #ddd;
+}
+.main-name {
+  font-weight: bold;
+}
+
+.area-name {
+  display: flex;
+  align-items: baseline;
+}
+
+.main-name {
+  font-weight: bold;
+}
+
+.kana {
+  font-size: 8px;
+  color: #888;
+  margin-left: 6px;
+}
+
+.group-content {
+  transition: max-height 0.2s ease;
+}
+
+.group-content.collapsed {
+  display: none;
+}
