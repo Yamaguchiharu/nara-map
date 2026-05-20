@@ -44,7 +44,7 @@ function updateLayerColor(name) {
     });
   }
 
-  localStorage.setItem("areaStatus", JSON.stringify(areaStatus));
+//  localStorage.setItem("areaStatus", JSON.stringify(areaStatus));
 }
 
 
@@ -298,6 +298,13 @@ function createGroupControls() {
     container.appendChild(div);
   });
 }
+
+function saveData() {
+  localStorage.setItem("areaStatus", JSON.stringify(areaStatus));
+  alert("保存しました");
+}
+
+document.getElementById("saveBtn").onclick = saveData;
 
 function resetAll() {
   Object.keys(layerMap).forEach(name => {
