@@ -131,7 +131,7 @@ function getKanaGroup(namekana) {
 // =======================
 // 市町村リスト生成
 // =======================
-function createList(features) {
+function createKanaList(features) {
 
   const container = document.getElementById("areaList");
   container.innerHTML = "";
@@ -333,36 +333,135 @@ function resetAll() {
 
 document.getElementById("resetBtn").onclick = resetAll;
 
+let currentView = "kana";
+
+function createGroupList(features) {
+  const container = document.getElementById("areaList");
+  container.innerHTML = "";
+
+  Object.keys(areaGroups).forEach(group => {
+
+    const header = document.createElement("h4");
+    header.textContent = "▼ " + group;
+    header.className = "group-header";
+
+    container.appendChild(header);
+
+    const groupDiv = document.createElement("div");
+    groupDiv.className = "group-content";
+
+    container.appendChild(groupDiv);
+
+    header.onclick = () => {
+      const isClosed = groupDiv.classList.toggle("collapsed");
+      header.textContent = (isClosed ? "▶ " : "▼ ") + group;
+    };
+
+    // ✅ 名前で一致するFeatureを探す
+    features.forEach(f => {
+      const name = f.properties.name;
+
+      if (!areaGroups[group].includes(name)) return;
+
+      const div = document.createElement("div");
+      div.className = "area-item";
+
+      const kana = f.properties.namekana || "";
+
+      const title = document.createElement("div");
+      title.className = "area-name";
+
+      title.innerHTML = `
+        <span class="main-name">${name}</span>
+        <span class="kana">${kana}</span>
+      `;
+
+      div.appendChild(title);
+
+      const levels = [
+        { label: "なし", value: "" },
+        { label: "注意報", value: "advisory" },
+        { label: "警報", value: "warning" },
+        { label: "危険", value: "danger" },
+        { label: "特別", value: "special" }
+      ];
+
+      levels.forEach(l => {
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = name;
+        radio.value = l.value;
+
+        radio.onchange = () => {
+          areaStatus[name] = l.value;
+          updateLayerColor(name);
+        };
+
+        const label = document.createElement("label");
+        label.textContent = l.label;
+
+        div.appendChild(radio);
+        div.appendChild(label);
+      });
+
+      groupDiv.appendChild(div);
+    });
+
+  });
+}
+
+function renderList(features) {
+  if (currentView === "kana") {
+    createKanaList(features);
+  } else {
+    createGroupList(features);
+  }
+}
+
+document.getElementById("kanaViewBtn").onclick = () => {
+  currentView = "kana";
+  renderList(currentFeatures);
+};
+
+document.getElementById("groupViewBtn").onclick = () => {
+  currentView = "group";
+  renderList(currentFeatures);
+};
+
+let currentFeatures = [];
+
 
 // =======================
 // 読み込み
 // =======================
 fetch("data/nara.geojson")
   .then(res => res.json())
-.then(data => {
+  .then(data => {
 
-  const saved = localStorage.getItem("areaStatus");
+    currentFeatures = data.features;
 
-  if (saved) {
-    areaStatus = JSON.parse(saved);
-  }
+    const saved = localStorage.getItem("areaStatus");
+    if (saved) {
+      areaStatus = JSON.parse(saved);
+    }
 
-  createGroupControls();
-  createList(data.features);
+    createGroupControls();
 
-  L.geoJSON(data, {
-    style: () => ({
-      color: "#444",
-      weight: 1,
-      fillColor: "#ffffff",
-      fillOpacity: 1
-    }),
-    onEachFeature: onEachFeature
-  }).addTo(map);
+    renderList(currentFeatures);
 
-  Object.keys(areaStatus).forEach(name => {
-    updateLayerColor(name);
-    syncIndividualRadios(name, areaStatus[name]);
-  });
+    L.geoJSON(data, {
+      style: () => ({
+        color: "#444",
+        weight: 1,
+        fillColor: "#ffffff",
+        fillOpacity: 1
+      }),
+      onEachFeature: onEachFeature
+    }).addTo(map);
+
+    Object.keys(areaStatus).forEach(name => {
+      updateLayerColor(name);
+      syncIndividualRadios(name, areaStatus[name]);
+    });
 
 });
