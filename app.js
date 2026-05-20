@@ -232,11 +232,11 @@ title.innerHTML = `
 // グループ操作
 // =======================
 const areaGroups = {
-  "北西部": ["奈良市西部","奈良市東部","生駒市","大和郡山市","天理市","桜井市","香芝市","葛城市","大和高田市","橿原市","御所市","平群町","三郷町","斑鳩町","安堵町","王寺町","河合町","上牧町","川西町","三宅町","広陵町","田原本町","高取町","明日香村"],
+  "北西部": ["奈良市西部","奈良市東部","大和高田市","大和郡山市","天理市","橿原市","桜井市","御所市","生駒市","香芝市","葛城市","平群町","三郷町","斑鳩町","安堵町","川西町","三宅町","田原本町","高取町","明日香村","上牧町","王寺町","広陵町","河合町"],
   "北東部": ["宇陀市","山添村"],
-  "五條・北部吉野": ["五條市北部","大淀町","下市町","吉野町"],
-  "南東部": ["東吉野村","黒滝村","川上村","天川村","上北山村","下北山村","曽爾村","御杖村"],
-  "南西部": ["五條市南部","十津川村","野迫川村"]
+  "五條・北部吉野": ["五條市北部","吉野町","大淀町","下市町"],
+  "南東部": ["曽爾村","御杖村","黒滝村","天川村","下北山村","上北山村","川上村","東吉野村"],
+  "南西部": ["五條市南部","野迫川村","十津川村"]
 };
 
 function applyGroup(groupName, level) {
@@ -357,26 +357,25 @@ function createGroupList(features) {
       header.textContent = (isClosed ? "▶ " : "▼ ") + group;
     };
 
-    // ✅ 名前で一致するFeatureを探す
-    features.forEach(f => {
-      const name = f.properties.name;
+areaGroups[group].forEach(name => {
 
-      if (!areaGroups[group].includes(name)) return;
+  const f = features.find(feat => feat.properties.name === name);
+  if (!f) return;
 
-      const div = document.createElement("div");
-      div.className = "area-item";
+  const div = document.createElement("div");
+  div.className = "area-item";
 
-      const kana = f.properties.namekana || "";
+  const kana = f.properties.namekana || "";
 
-      const title = document.createElement("div");
-      title.className = "area-name";
+  const title = document.createElement("div");
+  title.className = "area-name";
 
-      title.innerHTML = `
-        <span class="main-name">${name}</span>
-        <span class="kana">${kana}</span>
-      `;
+  title.innerHTML = `
+    <span class="main-name">${name}</span>
+    <span class="kana">${kana}</span>
+  `;
 
-      div.appendChild(title);
+  div.appendChild(title);
 
       const levels = [
         { label: "なし", value: "" },
