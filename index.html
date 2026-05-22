@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<title>奈良県一次細分区域マップ</title>
+<title>奈良県注警報色分けマップ</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="style.css">
@@ -13,11 +13,25 @@
 <div class="container">
 
   <div class="sidebar">
-    <h3>区域一覧</h3>
+    <h3>奈良県色分けマップ</h3>
 <div class="btn-group">
   <button class="control-btn" id="saveBtn">保存</button>
   <button class="control-btn" id="resetBtn">リセット</button>
 </div>
+
+<div class="panel">
+  <h4>テキスト入力</h4>
+  <p class="desc">市町村名を入力（複数地点の場合、改行かスペースまたは「、」で区切ってください）</p>
+<textarea id="inputArea" rows="5" placeholder="市町村名を入力"></textarea>
+<select id="levelSelect">
+  <option value="advisory">注意報</option>
+  <option value="warning">警報</option>
+  <option value="danger">危険</option>
+  <option value="special">特別</option>
+</select>
+<button id="applyBtn">反映</button>
+</div>
+ <h4>選択入力</h4>
     <div id="groupList"></div>
 <div class="view-switch">
   <button id="kanaViewBtn">五十音</button>

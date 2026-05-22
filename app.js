@@ -252,6 +252,33 @@ function applyGroup(groupName, level) {
   });
 }
 
+function applyTextInput() {
+
+  const text = document.getElementById("inputArea").value;
+
+  // 改行・カンマ・スペースで分割
+  const names = text
+    .split(/[\n,、\s]+/) 
+    .map(n => n.trim())
+    .filter(n => n);
+
+  names.forEach(name => {
+
+    if (!layerMap[name]) {
+      alert(name + " が見つかりませんでした");
+      return;
+    }
+
+    const level = document.getElementById("levelSelect").value;
+
+    areaStatus[name] = level;
+    updateLayerColor(name);
+    syncIndividualRadios(name, level);
+  });
+}
+
+document.getElementById("applyBtn").onclick = applyTextInput;
+
 // =======================
 // グループUI
 // =======================
